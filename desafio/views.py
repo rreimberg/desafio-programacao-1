@@ -6,7 +6,7 @@ from flask import (Blueprint, current_app, request, render_template,
                    redirect, url_for)
 from werkzeug import secure_filename
 
-from desafio.parser import parse_uploaded_file
+from desafio.business.purchase import Purchase
 
 site = Blueprint('site', __name__)
 
@@ -34,6 +34,7 @@ def post_customer_file():
 
 @site.route('/uploaded/<filename>')
 def check_uploaded_file(filename):
-    data = parse_uploaded_file(filename)
 
-    return render_template('check_uploaded_file.html', data=data)
+    purchase = Purchase.process_from_uploaded_file(filename)
+
+    return render_template('check_uploaded_file.html', purchase=purchase)
