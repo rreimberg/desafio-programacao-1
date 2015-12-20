@@ -1,0 +1,19 @@
+<table>
+
+    <tr>
+        <th>purchaser name</th>
+        <th>item description</th>
+        <th>item price</th>
+        <th>purchase count</th>
+        <th>merchant address</th>
+        <th>merchant name</th>
+    </tr>
+
+    {% for line in data %}
+    <tr>
+        {% for item in line %}
+        <td>{{ item }}</td>
+        {% endfor %}
+    </tr>
+    {% endfor %}
+</table>
