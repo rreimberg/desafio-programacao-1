@@ -17,3 +17,10 @@
     </tr>
     {% endfor %}
 </table>
+
+<p>Total da Compra: {{ purchase.total }}</p>
+
+<form method="POST" action="/save_purchase">
+    <input type="hidden" name="filename" value="{{ filename }}" />
+    <input type="submit" value="Salvar Compra" />
+</form>

@@ -32,9 +32,26 @@ def post_customer_file():
                                 filename=filename))
 
 
-@site.route('/uploaded/<filename>')
+@site.route('/uploaded/<filename>', methods=["GET"])
 def check_uploaded_file(filename):
 
     purchase = Purchase.process_from_uploaded_file(filename)
 
-    return render_template('check_uploaded_file.html', purchase=purchase)
+    return render_template('check_uploaded_file.html',
+                           purchase=purchase, filename=filename)
+
+
+@site.route("/save_purchase", methods=["POST"])
+def post_save_purchase():
+
+    filename = request.data['filename']
+
+    purchase = Purchase.process_from_uploaded_file(filename)
+    purchase.save()
+
+    return redirect(url_for('site.show_purchase', filename=filename))
+
+
+@site.route('/uploaded/<filename>', methods=["GET"])
+def show_purchase(filename):
+    pass
