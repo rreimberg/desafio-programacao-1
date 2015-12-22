@@ -3,7 +3,7 @@
 from .base import BaseTestCase
 
 from desafio import db
-from desafio.models import Merchant, Product
+from desafio.models import File, Merchant, Product, Purchase
 
 
 class ModelsTestCase(BaseTestCase):
@@ -36,3 +36,17 @@ class ModelsTestCase(BaseTestCase):
 
         p2 = Product.get_or_create(description='product 2', price=2.9)
         self.assertIsNone(p2.id)
+
+    def test_total_purchase_calculate(self):
+
+        _file = File(name='test_filename')
+
+        product1 = Product(description='product 1', price=1.5)
+        product2 = Product(description='product 2', price=2)
+
+        purchase1 = Purchase(file=_file, product=product1, item_count=5)
+        purchase2 = Purchase(file=_file, product=product2, item_count=10)
+
+        self.assertEqual(7.5, purchase1.total())
+
+        self.assertEqual(27.5, _file.total_purchases_value())

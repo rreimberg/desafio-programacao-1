@@ -10,6 +10,10 @@ from desafio import db
 from desafio.models import (Customer, File, Merchant, Product, Purchase)
 
 
+class DuplicatedFilename(Exception):
+    pass
+
+
 def parse_uploaded_file(filename):
     _file = '{0}/{1}'.format(current_app.config['UPLOAD_FOLDER'], filename)
 
@@ -25,6 +29,10 @@ def parse_uploaded_file(filename):
 
 def save_uploaded_file(uploaded_file):
     filename = secure_filename(uploaded_file.filename)
+
+    if File.query.filter_by(name=filename).count():
+        raise DuplicatedFilename
+
     uploaded_file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
 
     return filename
