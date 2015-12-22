@@ -4,7 +4,11 @@ import os
 
 from unittest import TestCase
 
-from desafio.app import create_app
+from desafio.app import db, create_app
+
+
+def set_testing_config(app):
+    app.config.from_object('desafio.config.testing.Configuration')
 
 
 class BaseTestCase(TestCase):
@@ -17,10 +21,14 @@ class BaseTestCase(TestCase):
         self.context = self.app.app_context()
         self.context.push()
 
+        db.create_all()
+
     def create_app(self):
-        app = create_app()
+        app = create_app(set_config=set_testing_config)
         return app
 
     def tearDown(self):
+        db.session.remove()
+        db.drop_all()
         self.context.pop()
         super(BaseTestCase, self).tearDown()
