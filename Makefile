@@ -2,9 +2,15 @@ clean:
 	find -iname *.pyc -delete
 	find -iname *.pyo -delete
 
+run:
+	.venv/bin/python manage.py runserver
+
 setup:
-	$(test) -d .venv || virtualenv -p python2.7 .venv
+	if [ ! -d .venv ]; then virtualenv -p python2.7 .venv; fi
+
 	.venv/bin/pip install -r requirements.txt
+
+	.venv/bin/python manage.py create_db
 
 test:
 	nosetests --rednose
