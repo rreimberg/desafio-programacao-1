@@ -1,0 +1,11 @@
+<a href="/upload" title="Carregar Novo Arquivo" alt="Carregar Novo Arquivo">Carregar Novo Arquivo</a>
+
+<h5>Arquivos carregados</h5>
+
+<ul>
+{% if files %}
+{% for file in files %}
+    <li><a href="/show/{{ file.name }}" title="Ver {{ file.name }}">{{ file.name }}</a></li>
+{% endfor %}
+{% endif %}
+</ul>

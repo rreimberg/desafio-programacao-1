@@ -1,19 +1,23 @@
 # -*- coding: utf-8 -*-
 
-import os
-
-from flask import (Blueprint, current_app, request, render_template,
+from flask import (Blueprint, request, render_template,
                    redirect, url_for)
-from werkzeug import secure_filename
 
-from desafio.business.purchase import Purchase
+from desafio.business import save_purchase, save_uploaded_file
+from desafio.models import File
 
 site = Blueprint('site', __name__)
 
 
 @site.route("/")
 def index():
-    return redirect(url_for('site.upload_form'))
+    return redirect(url_for('site.start_page'))
+
+
+@site.route("/start")
+def start_page():
+    files = File.query.all()
+    return render_template('start.html', files=files)
 
 
 @site.route("/upload", methods=['GET'])
@@ -23,35 +27,28 @@ def upload_form():
 
 @site.route("/upload", methods=["POST"])
 def post_customer_file():
-    _file = request.files['file']
+    uploaded_file = request.files['file']
 
-    if _file:
-        filename = secure_filename(_file.filename)
-        _file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
-        return redirect(url_for('site.check_uploaded_file',
+    if uploaded_file:
+        filename = save_uploaded_file(uploaded_file)
+
+        save_purchase(filename)
+
+        return redirect(url_for('site.show_purchase',
                                 filename=filename))
-
-
-@site.route('/uploaded/<filename>', methods=["GET"])
-def check_uploaded_file(filename):
-
-    purchase = Purchase.process_from_uploaded_file(filename)
-
-    return render_template('check_uploaded_file.html',
-                           purchase=purchase, filename=filename)
 
 
 @site.route("/save_purchase", methods=["POST"])
 def post_save_purchase():
 
     filename = request.form['filename']
-
-    purchase = Purchase.process_from_uploaded_file(filename)
-    purchase.save()
+    save_purchase(filename)
 
     return redirect(url_for('site.show_purchase', filename=filename))
 
 
-@site.route('/uploaded/<filename>', methods=["GET"])
+@site.route('/show/<filename>', methods=["GET"])
 def show_purchase(filename):
-    pass
+    uploaded_file = File.query.filter_by(name=filename).first()
+
+    return render_template('show_purchase.html', uploaded_file=uploaded_file)

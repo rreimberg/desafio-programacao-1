@@ -2,7 +2,7 @@
 
 from .base import BaseTestCase
 
-from desafio.parser import parse_uploaded_file
+from desafio.business import parse_uploaded_file
 
 
 class ParserTestCase(BaseTestCase):

@@ -1,0 +1,26 @@
+<a href="/start" title="Página Inicial" alt="Página Inicial">Página Inicial</a>
+
+<table>
+
+    <tr>
+        <th>purchaser name</th>
+        <th>item description</th>
+        <th>item price</th>
+        <th>purchase count</th>
+        <th>merchant address</th>
+        <th>merchant name</th>
+    </tr>
+
+    {% for purchase in uploaded_file.purchases %}
+    <tr>
+        <td>{{ purchase.customer.name }}</td>
+        <td>{{ purchase.product.description }}</td>
+        <td>{{ purchase.product.price }}</td>
+        <td>{{ purchase.item_count }}</td>
+        <td>{{ purchase.product.merchant.address }}</td>
+        <td>{{ purchase.product.merchant.name }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<p>Total da Compra: {{ uploaded_file.total_purchases_value() }}</p>
