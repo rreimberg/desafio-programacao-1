@@ -1,5 +1,7 @@
 
 
+from desafio import db
+from desafio.models import Merchant, Product, Customer, Purchase as PurchaseModel
 from desafio.parser import parse_uploaded_file
 
 
@@ -27,7 +29,18 @@ class Purchase(object):
         return _total
 
     def save(self):
-        pass
+        for item in self.items:
+            merchant = Merchant.get_or_create(name=item.merchant_name, address=item.merchant_address)
+            product = Product.get_or_create(merchant=merchant, description=item.item_description, price=item.item_price)
+            customer = Customer.get_or_create(name=item.purchaser_name)
+
+            purchase = PurchaseModel(customer=customer, product=product, item_count=item.purchase_count)
+
+            db.session.add(merchant)
+            db.session.add(product)
+            db.session.add(customer)
+            db.session.add(purchase)
+            db.session.commit()
 
 
 class PurchaseItem(object):

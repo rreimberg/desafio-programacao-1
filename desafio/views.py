@@ -44,7 +44,7 @@ def check_uploaded_file(filename):
 @site.route("/save_purchase", methods=["POST"])
 def post_save_purchase():
 
-    filename = request.data['filename']
+    filename = request.form['filename']
 
     purchase = Purchase.process_from_uploaded_file(filename)
     purchase.save()
