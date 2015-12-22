@@ -1,3 +1,6 @@
+coverage:
+	.venv/bin/nosetests --with-cover --cover-package=desafio
+
 clean:
 	find -iname *.pyc -delete
 	find -iname *.pyo -delete
@@ -13,4 +16,4 @@ setup:
 	.venv/bin/python manage.py create_db
 
 test:
-	nosetests --rednose
+	.venv/bin/nosetests --rednose

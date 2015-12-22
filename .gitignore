@@ -2,3 +2,5 @@
 *.py[co]
 desafio/static/uploads/*
 desafio/desafio.db
+cover/*
+.coverage
